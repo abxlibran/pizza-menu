@@ -1,3 +1,21 @@
+import React from "react";
+{
+  /* Old way of using props  */
+  /* <Pizza
+        name="Pizza Spinaci"
+        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
+        photoname="pizzas/spinaci.jpg"
+        // Price is passed as string here, we can convert it to number by entering Javascript mode like this {}
+        price = {12}
+      />
+      <Pizza
+        name="Mozerrla Pizza"
+        ingredients="mozarella, spinach, and ricotta cheese"
+        photoname="pizzas/funghi.jpg"
+        price = {19}
+      /> */
+}
+
 const pizzaData = [
   {
     name: "Focaccia",
@@ -44,43 +62,51 @@ const pizzaData = [
 ];
 
 const Menu = () => {
+  const pizzass = pizzaData;
+  const pizzasLength = pizzass.length;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <ul className="listItemWrapper">
-        {
-          // We pass pizza obj in order to get all data of the pizza data array
-          // We need to paas a unique key for performance optimization of React
-          pizzaData.map((pizzaMenu) => <Pizza pizzaObj = {pizzaMenu} key = {pizzaMenu.name}/>)
-        }
-      </ul>
-      {/* <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        photoname="pizzas/spinaci.jpg"
-        // Price is passed as string here, we can convert it to number by entering Javascript mode like this {}
-        price = {12}
-      />
-      <Pizza
-        name="Mozerrla Pizza"
-        ingredients="mozarella, spinach, and ricotta cheese"
-        photoname="pizzas/funghi.jpg"
-        price = {19}
-      /> */}
+      {/* This is conditional rendering */}
+      {/* We can use ternary operator than && operator for condition rendering */}
+      {pizzasLength ? (
+        // This below is react fragment
+        // Sometimes we need key for react fragment, below is the syntax
+        // <React.Fragment key = {"random"}>
+        <>
+          <p>Authentic Itialian cuisine</p>
+          <ul className="pizzas">
+            {/* Better way of using props using map method */}
+            {
+              // We pass pizza obj in order to get all data of the pizza data array
+              // We need to paas a unique key for performance optimization of React
+              pizzass.map((pizzaMenu) => (
+                <Pizza pizzaObj={pizzaMenu} key={pizzaMenu.name} />
+              ))
+            }
+          </ul>
+          {/*</React.Fragment> */}
+        </>
+      ) : (
+        <p>Menu not ready yet</p>
+      )}
     </main>
   );
 };
 
-function Pizza(props) {
+// We can desctructer props as well like this
+function Pizza({ pizzaObj }) {
   return (
-    <li className="pizzaWrapper">
-      <img src={props.pizzaObj.photoName} alt="Pizza" />
-      <h3>{props.pizzaObj.name}</h3>
-      <span>{props.pizzaObj.ingredients}</span>
-      <div>{props.pizzaObj.price + 3}</div>
-      <div>{props.pizzaObj.soldOut}</div>
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt="Pizza" />
+      <div>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        {/* {!pizzaObj.soldOut ? <span>Sold Out</span> : <span>{pizzaObj.price + 3}</span>} */}
+        {/* Conditional text rendering */}
+        <span>{pizzaObj.soldOut ? "Sold Out" : pizzaObj.price + 3}</span>
+      </div>
     </li>
   );
 }
-
 export default Menu;
